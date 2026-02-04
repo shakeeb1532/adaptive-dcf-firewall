@@ -1,0 +1,41 @@
+version: 1
+profile_id: elevated
+policy:
+  threat_level: high
+  escalation:
+    on_sni_match:
+      patterns: ["login.", "secure.", "admin.", "update."]
+      to_profile: elevated
+    on_port_match:
+      ports: [23, 2323, 3389, 5900, 445]
+      to_profile: elevated
+crypto:
+  aead_layers:
+    - algo: chacha20-poly1305
+      key_id: k_hi_out
+      rotate_seconds: 120
+    - algo: aes-256-gcm
+      key_id: k_hi_out_2
+      rotate_seconds: 300
+  key_separation:
+    direction: true
+    per_profile: true
+    per_epoch: true
+  envelope:
+    version: 1
+    include_policy_hash: true
+traffic_analysis:
+  activation:
+    anomaly_threshold: 1.5
+  padding:
+    enabled: true
+    min_pad_bytes: 16
+    max_pad_bytes: 128
+  pacing:
+    enabled: true
+    max_batch_bytes: 1200
+    max_delay_ms: 25
+logging:
+  sealed_artifacts: true
+  chain_hash: true
+  log_path: logs/payload_artifacts.log

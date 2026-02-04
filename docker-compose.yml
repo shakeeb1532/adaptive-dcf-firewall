@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  adcfw:
+    build: .
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /var/run:/var/run
+    command: ["python","/app/adaptive_firewall.py"]

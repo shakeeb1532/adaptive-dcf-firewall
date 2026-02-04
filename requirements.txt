@@ -1,0 +1,5 @@
+netfilterqueue==0.8.1
+scapy==2.5.0
+cryptography==42.0.8
+PyYAML==6.0.1
+pytest==8.2.2

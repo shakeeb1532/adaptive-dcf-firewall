@@ -1,0 +1,41 @@
+version: 1
+profile_id: baseline
+policy:
+  threat_level: low
+  escalation:
+    on_sni_match:
+      patterns: ["login.", "secure.", "admin."]
+      to_profile: elevated
+    on_port_match:
+      ports: [23, 2323, 3389, 5900]
+      to_profile: elevated
+crypto:
+  aead_layers:
+    - algo: chacha20-poly1305
+      key_id: k_base_out
+      rotate_seconds: 300
+    - algo: aes-256-gcm
+      key_id: k_base_out_2
+      rotate_seconds: 900
+  key_separation:
+    direction: true
+    per_profile: true
+    per_epoch: true
+  envelope:
+    version: 1
+    include_policy_hash: true
+traffic_analysis:
+  activation:
+    anomaly_threshold: 3.0
+  padding:
+    enabled: false
+    min_pad_bytes: 0
+    max_pad_bytes: 0
+  pacing:
+    enabled: false
+    max_batch_bytes: 0
+    max_delay_ms: 0
+logging:
+  sealed_artifacts: true
+  chain_hash: true
+  log_path: logs/payload_artifacts.log
