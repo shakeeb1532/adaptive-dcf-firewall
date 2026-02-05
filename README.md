@@ -149,6 +149,19 @@ sudo systemctl enable --now adaptive-firewall.service
 - Try `telnet` to port 23 or `rdp` to 3389 to trigger rules.
 - Use the control API to block and then un-block an IP and confirm behavior.
 
+## How to Run Tests
+Quick local test:
+```bash
+scripts/run_tests.sh
+```
+
+Individual tests:
+```bash
+PYTHONPATH=. python -m pytest -q
+PYTHONPATH=. python scripts/test_harness.py
+PYTHONPATH=. python scripts/mock_soc_test.py
+```
+
 ## Security Notes
 - Prototype; NFQUEUE + Python can be CPU-heavy. Consider eBPF/XDP for production.
 - Quarantine currently drops packets; replace with DNAT to a proxy if needed.
