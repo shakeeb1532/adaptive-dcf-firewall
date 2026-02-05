@@ -1,5 +1,8 @@
 # Adaptive DCF Firewall (Prototype)
 
+![CI](https://github.com/shakeeb1532/adaptive-dcf-firewall/actions/workflows/tests.yml/badge.svg)
+![Latest Tag](https://img.shields.io/github/v/tag/shakeeb1532/adaptive-dcf-firewall?sort=semver)
+
 A dynamic firewall that extends ideas from your DCF repo:
 - Destination-aware risk scoring (uses your `policy_engine`, or `policy_engine_adapter`).
 - Dynamic actions: allow / drop / rate-limit / quarantine.
