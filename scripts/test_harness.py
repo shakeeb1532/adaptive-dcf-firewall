@@ -37,6 +37,7 @@ def _setup_keys():
 
 
 def test_crypto_roundtrip():
+    _setup_keys()
     profiles = load_profiles("profiles")
     profile = profiles["baseline"].raw
     policy_hash = profiles["baseline"].policy_hash
@@ -46,10 +47,11 @@ def test_crypto_roundtrip():
     pt = b"payload-data-123"
     env = encrypt_payload(pt, profile, "baseline", policy_hash, ks, seq, "out", frame_plaintext=True)
     out = decrypt_payload(env, profile, policy_hash, ks, "in", frame_plaintext=True)
-    return out == pt
+    assert out == pt
 
 
 def test_policy_hash_mismatch():
+    _setup_keys()
     profiles = load_profiles("profiles")
     profile = profiles["baseline"].raw
     policy_hash = profiles["baseline"].policy_hash
@@ -62,11 +64,13 @@ def test_policy_hash_mismatch():
     try:
         decrypt_payload(env, profile, bad_hash, ks, "in", frame_plaintext=True)
     except Exception:
-        return True
-    return False
+        assert True
+        return
+    assert False
 
 
 def test_sealed_log_replay():
+    _setup_keys()
     log_key = bytes.fromhex(os.environ["ADCF_LOG_KEY"])
     log_path = "logs/harness_payload_artifacts.log"
     if os.path.exists(log_path):
@@ -77,12 +81,12 @@ def test_sealed_log_replay():
 
     # Run replay tool via subprocess for real CLI path
     cmd = [sys.executable, "artifact_replay.py", "--log", log_path, "--log-key-hex", os.environ["ADCF_LOG_KEY"]]
-    return subprocess.call(cmd) == 0
+    assert subprocess.call(cmd) == 0
 
 
 def test_self_test_unix():
     cmd = [sys.executable, "scripts/self_test_unix.py"]
-    return subprocess.call(cmd) == 0
+    assert subprocess.call(cmd) == 0
 
 
 def main():
